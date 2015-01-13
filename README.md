@@ -1,26 +1,18 @@
-# Vagrant::Winrm::S
+# Vagrant-WinRM-S
 
-TODO: Write a gem description
+A Vagrant communicator that uses `winrm-s` to communicate over winrm. Notably, allows for SSPI authentication of domain accounts when using a Windows host.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
 ```ruby
-gem 'vagrant-winrm-s'
+vagrant plugin install vagrant-winrm-s
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install vagrant-winrm-s
-
-## Usage
-
-TODO: Write usage instructions here
+Or, to install and test locally:
+```
+$ bundle install
+$ rake install_local
+```
 
 ## Contributing
 
