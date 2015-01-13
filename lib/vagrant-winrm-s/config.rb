@@ -1,23 +1,13 @@
+require "vagrant/../../plugins/communicators/winrm/config"
+
 module VagrantPlugins
   module CommunicatorWinRM
-    class Config < Vagrant.plugin("2", :config)
-      attr_accessor :username
-      attr_accessor :password
-      attr_accessor :host
-      attr_accessor :port
+    class WinrmSConfig < Config
+
       attr_accessor :transport
-      attr_accessor :guest_port
-      attr_accessor :max_tries
-      attr_accessor :timeout
 
       def initialize
-        @username   = UNSET_VALUE
-        @password   = UNSET_VALUE
-        @host       = UNSET_VALUE
-        @port       = UNSET_VALUE
-        @guest_port = UNSET_VALUE
-        @max_tries  = UNSET_VALUE
-        @timeout    = UNSET_VALUE
+        super
         @transport  = UNSET_VALUE
       end
 

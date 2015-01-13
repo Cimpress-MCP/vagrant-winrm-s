@@ -10,6 +10,7 @@ end
 
 group :plugins do
   gem "vagrant-winrm-s", path: "."
-  # gem "vagrant-managed-servers"
+  gem "vagrant-managed-servers"
+  gem "vagrant-orchestrate"
   # gem "vagrant-librarian-puppet"
 end

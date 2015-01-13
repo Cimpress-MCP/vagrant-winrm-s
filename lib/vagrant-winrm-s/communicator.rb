@@ -1,26 +1,15 @@
 require "timeout"
 require "log4r"
 
-require_relative "helper"
+require "vagrant/../../plugins/communicators/winrm/helper"
 require_relative "shell"
-require_relative "command_filter"
+require "vagrant/../../plugins/communicators/winrm/communicator"
 
 module VagrantPlugins
   module CommunicatorWinRM
-    class Communicator < Vagrant.plugin("2", :communicator)
-      def self.match?(_machine)
-        # This is useless, and will likely be removed in the future (this
-        # whole method).
-        true
-      end
-
+    class WinrmSCommunicator < Communicator
       def initialize(machine)
-        @cmd_filter = CommandFilter.new
-        @logger = Log4r::Logger.new("vagrant::communication::winrms")
-        @machine = machine
-        @shell = nil
-
-        @logger.info("Initializing WinRMSCommunicator")
+        super(machine)
       end
 
       def ready?
@@ -37,11 +26,6 @@ module VagrantPlugins
 
         @shell = nil
         return false
-      end
-
-      def shell(reload = false)
-        @shell = nil if reload
-        @shell ||= create_shell
       end
 
       def execute(command, opts = {}, &block)
@@ -70,30 +54,12 @@ module VagrantPlugins
       end
       alias_method :sudo, :execute
 
-      def test(command, opts = nil)
-        command = @cmd_filter.filter(command)
-        return false if command.empty?
-
-        opts = { error_check: false }.merge(opts || {})
-        execute(command, opts) == 0
-      end
-
-      def upload(from, to)
-        @logger.info("Uploading: #{from} to #{to}")
-        shell.upload(from, to)
-      end
-
-      def download(from, to)
-        @logger.info("Downloading: #{from} to #{to}")
-        shell.download(from, to)
-      end
-
       protected
 
       def create_shell
         winrm_info = Helper.winrm_info(@machine)
 
-        WinRMShell.new(
+        WinRMSShell.new(
           winrm_info[:host],
           @machine.config.winrm.username,
           @machine.config.winrm.password,
@@ -104,44 +70,6 @@ module VagrantPlugins
         )
       end
 
-      def create_elevated_shell_script(command)
-        path = File.expand_path("../scripts/elevated_shell.ps1", __FILE__)
-        script = Vagrant::Util::TemplateRenderer.render(path, options:
-        {
-          username: shell.username,
-          password: shell.password,
-          command: command
-        })
-
-        guest_script_path = "c:/tmp/vagrant-elevated-shell.ps1"
-        file = Tempfile.new(["vagrant-elevated-shell", "ps1"])
-
-        begin
-          file.write(script)
-          file.fsync
-          file.close
-          upload(file.path, guest_script_path)
-        ensure
-          file.close
-          file.unlink
-        end
-        guest_script_path
-      end
-
-      def execution_output(output, opts)
-        if opts[:shell] == :wql
-          return output
-        elsif opts[:error_check] && !opts[:good_exit].include?(output[:exitcode])
-          raise_execution_error(output, opts)
-        end
-        output[:exitcode]
-      end
-
-      def raise_execution_error(output, opts)
-        msg = "command execution failed with an exit code of #{output[:exitcode]}"
-        error_opts = opts.merge(_key: opts[:error_key], message: msg)
-        fail opts[:error_class], error_opts
-      end
     end
   end
 end

@@ -24,12 +24,12 @@ module VagrantPlugins
       communicator("winrm") do
         require File.expand_path("../communicator", __FILE__)
         init!
-        Communicator
+        WinrmSCommunicator
       end
 
       config("winrm") do
         require_relative "config"
-        Config
+        WinrmSConfig
       end
 
       def self.init!
