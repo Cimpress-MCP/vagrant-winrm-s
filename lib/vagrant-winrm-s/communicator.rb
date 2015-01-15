@@ -12,48 +12,6 @@ module VagrantPlugins
         super(machine)
       end
 
-      def ready?
-        @logger.info("Checking if WinRM is ready...")
-
-        Timeout.timeout(@machine.config.winrm.timeout) do
-          shell(true).powershell("hostname")
-        end
-
-        @logger.info("WinRM is ready!")
-        return true
-      rescue Vagrant::Errors::VagrantError => e
-        @logger.info("Problem communicating with WinRM: #{e.inspect}")
-
-        @shell = nil
-        return false
-      end
-
-      def execute(command, opts = {}, &block)
-        command = @cmd_filter.filter(command)
-        return 0 if command.empty?
-
-        opts = {
-          command: command,
-          elevated: false,
-          error_check: true,
-          error_class: Errors::ExecutionError,
-          error_key: :execution_error,
-          good_exit: 0,
-          shell: :powershell
-        }.merge(opts || {})
-
-        opts[:good_exit] = Array(opts[:good_exit])
-
-        if opts[:elevated]
-          guest_script_path = create_elevated_shell_script(command)
-          command = "powershell -executionpolicy bypass -file #{guest_script_path}"
-        end
-
-        output = shell.send(opts[:shell], command, &block)
-        execution_output(output, opts)
-      end
-      alias_method :sudo, :execute
-
       protected
 
       def create_shell

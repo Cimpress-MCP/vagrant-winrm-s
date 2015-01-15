@@ -8,10 +8,9 @@ A Vagrant communicator that uses `winrm-s` to communicate over winrm. Notably, a
 vagrant plugin install vagrant-winrm-s
 ```
 
-Or, to install and test locally:
-```
-$ bundle install
-$ rake install_local
+Or, to install and test a locally-developed version:
+```ruby
+$ rake install
 ```
 
 ## Contributing

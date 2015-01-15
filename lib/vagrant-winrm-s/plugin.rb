@@ -1,24 +1,24 @@
 begin
   require "vagrant"
 rescue LoadError
-  raise "The Vagrant Orchestrate plugin must be run within Vagrant."
+  raise "vagrant-winrm-s must be run from within vagrant."
 end
 
 # This is a sanity check to make sure no one is attempting to install
 # this into an early Vagrant version.
 if Vagrant::VERSION < "1.6.0"
-  fail "The Vagrant Orchestrate plugin is only compatible with Vagrant 1.6+"
+  fail "vagrant-winrm-s has only been tested with Vagrant 1.6+"
 end
+
+require "vagrant/../../plugins/communicators/winrm/plugin"
 
 module VagrantPlugins
   module CommunicatorWinRM
-    autoload :Errors, File.expand_path("../errors", __FILE__)
-
-    class Plugin < Vagrant.plugin("2")
+    class WinrmSPlugin < Plugin
       name "winrms communicator"
       description <<-DESC
       This plugin allows Vagrant to communicate with remote machines using
-      WinRM over SSL.
+      SSPINegotiate when run from Windows Hosts.
       DESC
 
       communicator("winrm") do
@@ -30,20 +30,6 @@ module VagrantPlugins
       config("winrm") do
         require_relative "config"
         WinrmSConfig
-      end
-
-      def self.init!
-        retrn if defined?(@_init)
-        @init = true
-
-        I18n.load_path << File.expand_path(
-          "locales/en.yml", CommunicatorWinRM.source_root)
-        I18n.reload!
-
-        require "vagrant/util/silence_warnings"
-        Vagrant::Util::SilenceWarnings.silence! do
-          require "winrm-s"
-        end
       end
     end
   end
