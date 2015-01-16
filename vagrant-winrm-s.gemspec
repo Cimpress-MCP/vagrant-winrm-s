@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ["nmaclennan@vistaprint.com"]
   spec.summary       = "Secure WinRM vagrant communicator"
   spec.description   = "A Vagrant plugin that allows for secure communication over WinRM"
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.homepage      = "https://github.com/Cimpress-MCP/vagrant-winrm-s"
+  spec.license       = "Apache 2.0"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
