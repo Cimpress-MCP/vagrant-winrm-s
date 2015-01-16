@@ -16,13 +16,14 @@ module VagrantPlugins
       include Vagrant::Util::Retryable
 
       attr_reader :transport
+      attr_reader :protocol
 
       def initialize(host, username, password, options = {})
         super(host, username, password, options)
-        
+
         @logger = Log4r::Logger.new("vagrant::communication::winrmsshell")
         @transport =  options[:transport] || :plaintext
-
+        @protocol =  (options[:transport] == :ssl) ? "https" : "http"
       end
 
       protected
@@ -39,6 +40,10 @@ module VagrantPlugins
         client.set_timeout(@timeout_in_seconds)
         client.toggle_nori_type_casting(:off)
         client
+      end
+
+      def endpoint
+        "#{@protocol}://#{@host}:#{@port}/wsman"
       end
 
       def endpoint_options

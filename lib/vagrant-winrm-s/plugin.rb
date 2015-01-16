@@ -4,12 +4,6 @@ rescue LoadError
   raise "vagrant-winrm-s must be run from within vagrant."
 end
 
-# This is a sanity check to make sure no one is attempting to install
-# this into an early Vagrant version.
-if Vagrant::VERSION < "1.6.0"
-  fail "vagrant-winrm-s has only been tested with Vagrant 1.6+"
-end
-
 require "vagrant/../../plugins/communicators/winrm/plugin"
 
 module VagrantPlugins
