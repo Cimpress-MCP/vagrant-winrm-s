@@ -24,8 +24,7 @@ module VagrantPlugins
           transport: @machine.config.winrm.transport,
           port: @machine.config.winrm.port,
           timeout_in_seconds: @machine.config.winrm.timeout,
-          max_tries: @machine.config.winrm.max_tries
-        )
+          max_tries: @machine.config.winrm.max_tries)
       end
 
     end
