@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "vagrant-winrm-s"
   spec.version       = VagrantPlugins::CommunicatorWinRMS::VERSION
   spec.authors       = ["Norm MacLennan"]
-  spec.email         = ["nmaclennan@vistaprint.com"]
+  spec.email         = ["nmaclennan@cimpress.com"]
   spec.summary       = "Secure WinRM vagrant communicator"
   spec.description   = "A Vagrant plugin that allows for secure communication over WinRM"
   spec.homepage      = "https://github.com/Cimpress-MCP/vagrant-winrm-s"
