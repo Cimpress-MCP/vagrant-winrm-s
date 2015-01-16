@@ -63,6 +63,7 @@ winrm set winrm/config/service @{AllowUnencrypted="false"}
 ```
 
 See also:
+
 * [MSDN article about configuring WinRM](http://msdn.microsoft.com/en-us/library/aa384372\(v=vs.85\).aspx)
 * [WinRM gem](https://github.com/WinRb/WinRM/blob/master/README.md#troubleshooting)
 * [WinRM-S gem](https://github.com/opscode/winrm-s/blob/master/README.md)
