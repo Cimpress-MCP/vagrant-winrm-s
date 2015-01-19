@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.0.0
+deploy:
+  provider: rubygems
+  api_key:
+    secure: "NYtaGR3xlvnvEb22lIs3Hwilj3DqW2IUd03GMrwkiO6M6SsCjURUE8XnCcWuJbXWB6t3dbqxmlIRwlt/yhnT9/f8KnQK3OsuuR71fN6Ku5YK6iGeodEockCOUtUhQUeJ9Jc1YDpc2hYplwyX/JIqiZ51uX6SnYpKgD1lnhynC9c="
+  gem: vagrant-winrm-s
+  on:
+    tags: true
+    all_branches: true
