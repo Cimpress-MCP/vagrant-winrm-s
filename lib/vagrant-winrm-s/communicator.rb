@@ -22,7 +22,7 @@ module VagrantPlugins
           @machine.config.winrm.username,
           @machine.config.winrm.password,
           transport: @machine.config.winrm.transport,
-          port: @machine.config.winrm.port,
+          port: winrm_info[:port],
           timeout_in_seconds: @machine.config.winrm.timeout,
           max_tries: @machine.config.winrm.max_tries)
       end
