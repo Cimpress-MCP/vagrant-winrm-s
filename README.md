@@ -1,5 +1,8 @@
 # Vagrant-WinRM-S
 
+Note: This plugin is only compatible with vagrant <= 1.7.2. Future versions
+of Vagrant will provide this functionality natively.
+
 A Vagrant communicator that uses the `winrm-s` gem to communicate over winrm. Notably, allows for SSPI authentication of domain accounts when using a Windows host.
 
 ## Installation
