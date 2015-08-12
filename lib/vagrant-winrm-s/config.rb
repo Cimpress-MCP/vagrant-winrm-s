@@ -8,7 +8,7 @@ module VagrantPlugins
 
       def initialize
         super
-        @transport  = UNSET_VALUE
+        @transport = UNSET_VALUE
       end
 
       def finalize!

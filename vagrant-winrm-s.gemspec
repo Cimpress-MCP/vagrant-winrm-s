@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "winrm-s", "~>0.1.0"
+  spec.add_dependency "winrm-s", "~>0.3.1"
   spec.add_dependency "httpclient", "~>2.4.0"
 
   spec.add_development_dependency "bundler", "~> 1.7"
