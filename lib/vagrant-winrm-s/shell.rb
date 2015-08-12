@@ -23,7 +23,7 @@ module VagrantPlugins
 
         @logger = Log4r::Logger.new("vagrant::communication::winrmsshell")
         @transport =  options[:transport] || :plaintext
-        @protocol =  (options[:transport] == :ssl) ? "https" : "http"
+        @protocol = (options[:transport] == :ssl) ? "https" : "http"
       end
 
       protected
