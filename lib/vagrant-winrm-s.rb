@@ -1,6 +1,5 @@
 require "vagrant-winrm-s/version"
 require "vagrant-winrm-s/plugin"
-require "vagrant-winrm-s/config"
 
 module VagrantPlugins
   module CommunicatorWinRM

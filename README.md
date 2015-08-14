@@ -1,6 +1,6 @@
 # Vagrant-WinRM-S
 
-Note: This plugin is only compatible with vagrant <= 1.7.2. Future versions
+Note: This plugin is only compatible with vagrant >= 1.7.4. Future versions
 of Vagrant will provide this functionality natively.
 
 A Vagrant communicator that uses the `winrm-s` gem to communicate over winrm. Notably, allows for SSPI authentication of domain accounts when using a Windows host.
@@ -41,9 +41,11 @@ config.winrm.transport = :sspinegotiate
 ### What about the SSL transport?
 
 The `:ssl` transport is available and can be used to authenticate local accounts.
-However, the versions of `WinRM` and `HTTPClient` bundled with Vagrant make it
-difficult to ignore untrusted/self-signed certificates. But users with proper
-certificates should have no problem.
+Vagrant supports SSL with/without self-signed certs out of the box as of 1.7.3.
+`vagrant-winrm-s` is no longer necessary to use this transport.
+
+Just ensure you set `config.winrm.ssl_peer_verification` to false for self-signed
+certs.
 
 ## Setting up your server
 

@@ -7,7 +7,7 @@ Vagrant::Util::SilenceWarnings.silence! do
   require "winrm-s"
 end
 
-require "vagrant/../../plugins/communicators/winrm/file_manager"
+require "winrm-fs/file_manager"
 require "vagrant/../../plugins/communicators/winrm/shell"
 
 module VagrantPlugins
@@ -15,35 +15,40 @@ module VagrantPlugins
     class WinRMSShell < WinRMShell
       include Vagrant::Util::Retryable
 
-      attr_reader :transport
-      attr_reader :protocol
-
-      def initialize(host, username, password, options = {})
-        super(host, username, password, options)
-
+      def initialize(host, port, options = {})
+        super(host, port, options)
         @logger = Log4r::Logger.new("vagrant::communication::winrmsshell")
-        @transport = options[:transport] || :plaintext
-        @protocol = (options[:transport] == :ssl) ? "https" : "http"
       end
 
       protected
 
+      def endpoint
+        case @config.transport.to_sym
+        when :ssl
+          "https://#{@host}:#{@port}/wsman"
+        when :plaintext
+          "http://#{@host}:#{@port}/wsman"
+        when :sspinegotiate
+          "http://#{@host}:#{@port}/wsman"
+        else
+          raise Errors::WinRMInvalidTransport, transport: @config.transport
+        end
+      end
+
+      # The only reason we're overriding this one is to get rid
+      # of `toggle_nori_type_casting` which is deprecated in new
+      # versions of winrm gem (and the deprecation message seems
+      # to have a bug that throws an exception)
       def new_session
         @logger.info("Attempting to connect to WinRM...")
         @logger.info("  - Host: #{@host}")
         @logger.info("  - Port: #{@port}")
         @logger.info("  - Username: #{@username}")
-        @logger.info("  - Transport: #{@transport}")
-        @logger.info("  - Endpoint: #{endpoint}")
+        @logger.info("  - Transport: #{@config.transport}")
 
-        client = ::WinRM::WinRMWebService.new(endpoint, @transport, endpoint_options)
-        client.set_timeout(@timeout_in_seconds)
-        client.toggle_nori_type_casting(:off)
+        client = ::WinRM::WinRMWebService.new(endpoint, @config.transport.to_sym, endpoint_options)
+        client.set_timeout(@config.timeout)
         client
-      end
-
-      def endpoint
-        "#{@protocol}://#{@host}:#{@port}/wsman"
       end
 
       def endpoint_options
@@ -51,9 +56,9 @@ module VagrantPlugins
           pass: @password,
           host: @host,
           port: @port,
-          operation_timeout: @timeout_in_seconds,
-          basic_auth_only: (@transport == :plaintext) }
+          basic_auth_only: (@config.transport == :plaintext),
+          no_ssl_peer_verification: !@config.ssl_peer_verification }
       end
-    end # WinShell class
+    end
   end
 end

@@ -20,11 +20,6 @@ module VagrantPlugins
         init!
         WinrmSCommunicator
       end
-
-      config("winrm") do
-        require_relative "config"
-        WinrmSConfig
-      end
     end
   end
 end
