@@ -31,7 +31,10 @@ module VagrantPlugins
         when :sspinegotiate
           "http://#{@host}:#{@port}/wsman"
         else
+          # rubocop:disable SignalException
+          # To match base vagrant style
           raise Errors::WinRMInvalidTransport, transport: @config.transport
+          # rubocop:enable SignalException
         end
       end
 
